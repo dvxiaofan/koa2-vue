@@ -3,6 +3,35 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import {
+  Button,
+  Row,
+  Col,
+  Form,
+  Input,
+  Card,
+  Select,
+  DatePicker,
+  Table,
+  message,
+  Pagination,
+  Modal,
+  Radio
+} from 'ant-design-vue'
+
+Vue.component(Button.name, Button)
+Vue.component(Row.name, Row)
+Vue.component(Col.name, Col)
+Vue.component(Form.name, Form)
+Vue.component(Input.name, Input)
+Vue.component(Card.name, Card)
+Vue.component(Select.name, Select)
+Vue.component(DatePicker.name, DatePicker)
+Vue.component(Table.name, Table)
+Vue.component(message.name, message)
+Vue.component(Pagination.name, Pagination)
+Vue.component(Modal.name, Modal)
+Vue.component(Radio.name, Radio)
 
 Vue.config.productionTip = false
 
