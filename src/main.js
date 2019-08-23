@@ -13,7 +13,7 @@ import {
   Select,
   DatePicker,
   Table,
-  message,
+  // message,
   Pagination,
   Modal,
   Radio
@@ -28,7 +28,6 @@ Vue.component(Card.name, Card)
 Vue.component(Select.name, Select)
 Vue.component(DatePicker.name, DatePicker)
 Vue.component(Table.name, Table)
-Vue.component(message.name, message)
 Vue.component(Pagination.name, Pagination)
 Vue.component(Modal.name, Modal)
 Vue.component(Radio.name, Radio)
