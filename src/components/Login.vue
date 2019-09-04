@@ -2,7 +2,7 @@
  * @Author: zhang
  * @Date: 2019-08-23 16:43:55
  * @Last Modified by: zhang
- * @Last Modified time: 2019-08-23 17:23:59
+ * @Last Modified time: 2019-09-04 15:44:34
  */
 
 <template>
@@ -12,41 +12,40 @@
       <a-col :span='8'>
         <a-card title="欢迎登陆">
           <a-form
+            :form='form'
             @submit="handleSubmit"
-            :autoFormCreate="
-              form => {
-                this.form = form
-              }
-            "
           >
             <a-form-item
-              label="username"
-              :labelCol="{span: 4}"
-              :wrapperCol="{span: 20}"
-              fieldDecoratorId="username"
-              :fieldDecotatorOptions="{
-                rules: [
-                {required: true, message: 'Please input your username!'}]
-              }"
+              label="用户名"
+              :labelCol="formItemLayout.labelCol"
+              :wrapperCol="formItemLayout.wrapperCol"
             >
-              <a-input></a-input>
+              <a-input
+                placeholder="username"
+                v-decorator="[
+                  'username',
+                  {rules: [{ required: true, message: 'Please input your username!' }]}
+                ]"
+              />
             </a-form-item>
 
             <a-form-item
-              label="password"
-              :labelCol="{span: 4}"
-              :wrapperCol="{span: 20}"
-              fieldDecoratorId="password"
-              :fieldDecotatorOptions="{
-                rules: [
-                {required: true, message: 'Please input your password!'}]
-              }"
+              label="密码"
+              :labelCol="formItemLayout.labelCol"
+              :wrapperCol="formItemLayout.wrapperCol"
             >
-              <a-input></a-input>
+              <a-input
+                type="password"
+                placeholder="password"
+                v-decorator="[
+                  'password',
+                  {rules: [{ required: true, message: 'Please input your password!' }]}
+                ]"
+              />
             </a-form-item>
 
             <a-form-item :wrapperCol="{span: 16, offset: 4}">
-              <a-button type="primary" htmlType="submit">Submit</a-button>
+              <a-button type="primary" htmlType="submit">登录</a-button>
             </a-form-item>
           </a-form>
         </a-card>
@@ -57,19 +56,29 @@
 </template>
 
 <script>
+const formItemLayout = {
+  labelCol: { span: 5 },
+  wrapperCol: { span: 18 }
+}
+
 export default {
   name: 'Login',
   data () {
     return {
-      formLayout: 'horizontal'
+      formItemLayout,
+      formLayout: 'horizontal',
+      form: this.$form.createForm(this)
     }
+  },
+  beforeCreate () {
+    this.form = this.$form.createForm(this)
   },
   methods: {
     handleSubmit (e) {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Revived values of form: ', values)
+          console.log('Received values of form: ', values)
         }
       })
     }

@@ -32,6 +32,16 @@ Vue.component(Pagination.name, Pagination)
 Vue.component(Modal.name, Modal)
 Vue.component(Radio.name, Radio)
 
+const FormItem = Form.Item
+const Option = Select.Option
+const RangePicker = DatePicker.RangePicker
+const RadioGroup = Radio.Group
+
+Vue.component(FormItem.name, FormItem)
+Vue.component(Option.name, Option)
+Vue.component(RangePicker.name, RangePicker)
+Vue.component(RadioGroup.name, RadioGroup)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
