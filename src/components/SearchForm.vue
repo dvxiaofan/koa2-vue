@@ -86,8 +86,8 @@ const SearchForm = {
         </a-form>
       </a-card>
     )
-  },
-},
+  }
+}
 
 
 
