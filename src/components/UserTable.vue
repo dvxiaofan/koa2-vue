@@ -33,7 +33,7 @@
 import dataSource from './data'
 
 export default {
-  name: 'Table',
+  name: 'UserTable',
   props: ['requestList', 'updateData', 'searchParams'],
   data () {
     return {
@@ -84,15 +84,14 @@ export default {
     }
   },
   methods: {
-    request () {
-      onChangePage (pageNumber) {
-        this.params.page = pageNumber
-        this.request()
-      }
-    },
-    mounted () {
+    request () {},
+    onChangePage (pageNumber) {
+      this.params.page = pageNumber
       this.request()
     }
+  },
+  mounted () {
+    this.request()
   }
 }
 </script>
