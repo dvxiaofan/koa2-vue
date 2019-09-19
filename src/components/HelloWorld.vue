@@ -2,7 +2,7 @@
  * @Author: zhang
  * @Date: 2019-09-04 16:03:50
  * @Last Modified by: zhang
- * @Last Modified time: 2019-09-04 17:37:47
+ * @Last Modified time: 2019-09-19 14:11:39
  */
 
 <template>
@@ -28,34 +28,30 @@
     </a-card>
 
     <user-table
-      v-if="hackReset"
-      v-on:receiveTable="receiveTable"
-      :requestList="requestList"
-      :updateData="updateData"
-      :searchParams="searchParams"
     ></user-table>
     <user-form
-      :visible="visible"
-      :userInfo="userInfo"
-      :requestList="requestList"
-      :title="title"
+      ref='collectionForm'
+      :visible='visible'
+      :userInfo='userInfo'
+      :requestList='requestList'
+      :title='title'
       v-on:hideForm="hideForm"
-    ></user-form>
+    >
+    </user-form>
   </div>
 </template>
 
 <script>
 import UserForm from '@/components/UserForm'
-import UserTable from '@/components/UserTable'
 import SearchForm from '@/components/SearchForm'
-import { Modal } from 'ant-design-vue';
-import { async } from 'q';
+import UserTable from '@/components/UserTable'
+import { Modal } from 'ant-design-vue'
 
 export default {
   name: 'HelloWorld',
   components: {
-    UserForm,
     UserTable,
+    UserForm,
     SearchForm
   },
   data () {
@@ -70,9 +66,9 @@ export default {
   },
   methods: {
     handleOperator (type) {
-      let self = this.$http
-      let _this = this
-      let deletedId
+      // let self = this.$http
+      // let _this = this
+      // let deleteId
       if (type === 'create') {
         this.title = '创建员工'
         this.visible = true
@@ -85,50 +81,39 @@ export default {
           })
           return
         }
-
-        _this.title = type === 'edit' ? '编辑用户' : '用户详情'
-        _this.visible = true
-        deletedId = _this.selectItem.id
+        console.log('执行编辑用户')
+        // this.title = type === 'edit' ? '编辑用户' : '用户详情'
+        // this.visible = true
+        // deleteId = this.selectItem.id
       } else if (type === 'delete') {
-        if (!_this.selectItem.id) {
+        if (!this.selectItem.id) {
           Modal.info({
             title: '信息',
             content: '请选择一个用户'
           })
           return
         }
-
         Modal.confirm({
-          content: '确定要删除此用户吗',
-          onOk: async () => {
-            let options = {
-              url: 'api/deletePersonnelTable',
-              method: 'post'
-            }
-            let params = {
-              id: deletedId
-            }
-            const result = await axios.getData(self, options, params)
-            if (result === '删除成功') {
-              _this.requestList = !_this.requestList
-            }
-          }
+          content: '确定要删除此用户吗'
         })
       }
     },
     hideForm (data, params) {
+      console.log('data：', data, 'params:', params)
       this.visible = false
+      // 更新完数据， 通知userTable更新数据
       if (data === 'update' && params !== undefined) {
         this.requestList = !this.requestList
         this.updateData = params
+        return
       }
       if (data === 'update' && params === undefined) {
+        // 创建完数据，通知userTable更新数据
         this.requestList = !this.requestList
       }
     }
   },
   receiveTable (data) {
-    console.log(11)
     this.userInfo = data
     this.selectItem = data
   }

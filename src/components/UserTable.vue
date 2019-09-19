@@ -2,18 +2,13 @@
  * @Author: zhang
  * @Date: 2019-09-04 16:31:56
  * @Last Modified by: zhang
- * @Last Modified time: 2019-09-04 16:33:03
+ * @Last Modified time: 2019-09-16 17:32:34
  */
 
 <template>
   <div>
     <a-card>
       <a-table
-        bordered
-        :columns="columns"
-        :dataSource="dataSource"
-        :rowSelection="rowSelection"
-        :pagination="false"
       />
 
       <template>
@@ -30,7 +25,7 @@
 </template>
 
 <script>
-import dataSource from './data'
+// import dataSource from './data'
 
 export default {
   name: 'UserTable',
@@ -41,7 +36,7 @@ export default {
       selectedRows: [],
       selectedRowKesy: [],
       pagination: {},
-      columns: dataSource.columns,
+      // columns: dataSource.columns,
       total: null,
       params: {
         page: 1,
@@ -59,7 +54,7 @@ export default {
     },
     searchParams () {
       let _this = this
-      this$http.post('api/searchOperator', this.searchParams).then(res => {
+      this.$http.post('api/searchOperator', this.searchParams).then(res => {
         res.data.result.map((item, index) => {
           item.key = index
         })

@@ -2,7 +2,7 @@
  * @Author: zhang
  * @Date: 2019-09-04 16:31:59
  * @Last Modified by: zhang
- * @Last Modified time: 2019-09-04 16:33:19
+ * @Last Modified time: 2019-09-19 14:06:34
  */
 
 <script>
@@ -12,23 +12,24 @@ const FormItem = Form.Item
 const Option = Select.Option
 const RadioGroup = Radio.Group
 const CollectionCreateForm = Form.create()({
-  componets: {
+  components: {
     'a-form': Form,
     'a-form-item': FormItem,
-    'a-select': Option,
+    'a-select': Select,
+    'a-option': Option,
     'a-radio': Radio,
     'a-radio-group': RadioGroup
   },
 
   props: ['visible', 'selectData', 'title', 'userInfo'],
-  render (h) {
+  render () {
     const { visible, form, title } = this
-    const { getFieldDecotator } = form
+    const { getFieldDecorator } = form
     const userInfo = this.userInfo || {
-      state: 'devzhang',
-      sex: 'man',
-      birthday: '1999-09-09',
-      interest: 'music'
+      state: '咸鱼一条',
+      sex: '男',
+      birthday: '2000-01-01',
+      interest: '篮球'
     }
     const formItemLayout = {
       labelCol: {
@@ -40,12 +41,10 @@ const CollectionCreateForm = Form.create()({
         sm: { span: 20 }
       }
     }
-
     const rowObject = {
       minRows: 4,
       maxRows: 6
     }
-
     return (
       <a-modal
         visible={visible}
@@ -59,10 +58,10 @@ const CollectionCreateForm = Form.create()({
         }}
       >
         <a-form layout="vertical">
-          <a-form-item {...{ props: formItemLayout }} label="用户名：">
+          <a-form-item {...{ props: formItemLayout }} label="用户名:">
             {title === '用户详情'
               ? userInfo.username
-              : getFieldDecotator('username', {
+              : getFieldDecorator('username', {
                 initialValue: userInfo.username,
                 rules: [
                   {
@@ -71,17 +70,16 @@ const CollectionCreateForm = Form.create()({
                   },
                   {
                     required: true,
-                    message: '该用户名不能为空'
+                    message: '用户名不能为空'
                   }
                 ]
-              })(<a-input placeholder="请输入用户名" />)
-            }
+              })(<a-input placeholder="请输入用户名" />)}
           </a-form-item>
-
-          <a-form-item {...{ props: formItemLayout }} label="性别">
-            {title === '用户详情'
-              ? (<p> {userInfo.sex}</p>)
-              : getFieldDecotator('sex', {
+          <a-form-item {...{ props: formItemLayout }} label="性别：">
+            {title === '用户详情' ? (
+              <p> {userInfo.sex}</p>
+            ) : (
+              getFieldDecorator('sex', {
                 initialValue: userInfo.sex
               })(
                 <a-radio-group>
@@ -89,44 +87,37 @@ const CollectionCreateForm = Form.create()({
                   <a-radio value="女">女</a-radio>
                 </a-radio-group>
               )
-            }
+            )}
           </a-form-item>
-
           <a-form-item {...{ props: formItemLayout }} label="状态">
             {title === '用户详情'
               ? userInfo.state
-              : getFieldDecotator('state', {
+              : getFieldDecorator('state', {
                 initialValue: userInfo.state
               })(
                 <a-select>
-                  <a-option value="devzhang">devzhang</a-option>
-                  <a-option value="xiaofan">xiaofan</a-option>
-                  <a-option value="ming">ming</a-option>
-                  <a-option value="somebody">somebody</a-option>
-                  <a-option value="youyouyou">youyouyou</a-option>
+                  <a-option value="咸鱼一条">咸鱼一条</a-option>
+                  <a-option value="风华浪子">风华浪子</a-option>
+                  <a-option value="北大才子一枚">北大才子一枚</a-option>
+                  <a-option value="百度FE">百度FE</a-option>
+                  <a-option value="创业者">创业者</a-option>
                 </a-select>
-              )
-            }
+              )}
           </a-form-item>
-
           <a-form-item {...{ props: formItemLayout }} label="生日：">
             {title === '用户详情'
               ? moment(userInfo.birthday).format('YYYY-MM-DD')
-              : getFieldDecotator('birthday', {
-                initialValue: moment(userInfo.birthday).format('YYYY-MM-DD')
-              })(<a-date-picker showTime format='YYYY-MM-DD'></a-date-picker>)
-            }
+              : getFieldDecorator('birthday', {
+                initialValue: moment(userInfo.birthday)
+              })(<a-date-picker showTime format="YYYY-MM-DD" />)}
           </a-form-item>
-
           <a-form-item {...{ props: formItemLayout }} label="爱好">
             {title === '用户详情'
               ? userInfo.interest
-              : getFieldDecotator('interest', {
+              : getFieldDecorator('interest', {
                 initialValue: userInfo.interest
-              })(<a-text-area autosize={rowObject}></a-text-area>)
-            }
+              })(<a-input type='textarea' autosize={rowObject} />)}
           </a-form-item>
-
         </a-form>
       </a-modal>
     )
@@ -134,18 +125,18 @@ const CollectionCreateForm = Form.create()({
 })
 
 export default {
-  name: 'UserForm',
+  name: 'userForm',
   props: ['visible', 'userInfo', 'title'],
   methods: {
     handleCancel () {
-      const form = this.formRef.form
+      const form = this.formRef
       this.$emit('hideForm', 'noUpdate')
       form.resetFields()
     },
-    handleCreate () {
-      const form = this.formRef.form
+    handleCreate (e) {
+      const form = this.formRef
+      this.$emit('hideForm', 'update')
       form.resetFields()
-      this.$emit('hideForm', 'upDate')
     },
     saveFormRef (formRef) {
       this.formRef = formRef
@@ -156,19 +147,15 @@ export default {
     return (
       <div>
         <CollectionCreateForm
-          wrappedComponentRef={this.saveFormRef}
+          wrappedComponentRef={this.saveFormRef(this.$form.createForm(this))}
           visible={this.visible}
           userInfo={this.userInfo}
           title={this.title}
-          onCancel={this.onCancel}
-          onCreate={this.onCreate}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
         />
       </div>
     )
   }
 }
 </script>
-
-<style scoped>
-
-</style>
